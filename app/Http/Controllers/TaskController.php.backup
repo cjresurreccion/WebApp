@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use \App\Task;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
+class TaskController extends Controller
+{
+    /**
+     * Create a new task instance.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
+    public function storeTask(Request $request,$freshDeskId,$title,$desc,$email)
+    {
+        $task = new Task;
+
+		$task->freshDeskId = $freshDeskId;
+		$task->title = $title;
+		$task->desc = $desc;
+		$task->email = $email;
+		$task->type = 'Task'; // a custom ticket type correspondingly made in the freshdesk acct.
+
+        $task->save();
+    }
+	
+
+    public function getAllTasks(Request $request)
+    {
+		//$tasks = \App\Task::all();
+		$tasks = \App\Task::where('type', 'Task')
+               ->orderBy('freshDeskId', 'asc') //order field, sort order (asc,desc)
+               ->take(10)
+               ->get();
+
+		foreach ($tasks as $task) {
+			echo "freshDeskId: ".$task->freshDeskId." | ".
+				 "title: ".$task->title." | ".
+				 "desc: ".$task->desc." | ".
+				 "email: ".$task->email." | ".
+				 "type: ".$task->type." | ".
+				 "<br>";
+		}
+
+    }
+
+	public function getTask(Request $request)
+    {
+		//$tasks = \App\Task::all();
+		$tasks = \App\Task::where('type', 'Task')
+               ->orderBy('freshDeskId', 'asc') //order field, sort order (asc,desc)
+               ->take(10)
+               ->get();
+
+		foreach ($tasks as $task) {
+			echo "freshDeskId: ".$task->freshDeskId." | ".
+				 "title: ".$task->title." | ".
+				 "desc: ".$task->desc." | ".
+				 "email: ".$task->email." | ".
+				 "type: ".$task->type." | ".
+				 "<br>";
+		}
+
+    }
+	
+	
+	
+}
